@@ -130,7 +130,8 @@ async function startTabBasedApp(params) {
           id={controllerID + '_tabs'}
           style={params.tabsStyle}
           appStyle={params.appStyle}
-          initialTabIndex={params.initialTabIndex}>
+          initialTabIndex={params.initialTabIndex}
+          overlay={params.overlay}>
           {
             params.tabs.map(function (tab, index) {
               return (
@@ -219,7 +220,7 @@ async function startSingleScreenApp(params) {
     return;
   }
 
-
+  const navigatorID = controllerID + '_nav';
   const screenInstanceID = _.uniqueId('screenInstanceID');
   const {
     navigatorStyle,
@@ -276,6 +277,7 @@ async function startSingleScreenApp(params) {
           component={screen.screen}
           components={components}
           passProps={passProps}
+          overlay={params.overlay}
           style={navigatorStyle}
           leftButtons={navigatorButtons.leftButtons}
           rightButtons={navigatorButtons.rightButtons}
@@ -746,6 +748,14 @@ function savePassProps(params) {
   }
 }
 
+function showOverlay(params) {
+  ScreenUtils.showOverlay(params)
+}
+
+function removeOverlay() {
+  ScreenUtils.removeOverlay()
+}
+
 function showContextualMenu() {
   // Android only
 }
@@ -814,5 +824,7 @@ export default {
   showContextualMenu,
   dismissContextualMenu,
   getCurrentlyVisibleScreenId,
-  getLaunchArgs
+  getLaunchArgs,
+  showOverlay,
+  removeOverlay
 };

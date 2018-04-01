@@ -34,6 +34,10 @@ async function startSingleScreenApp(params) {
       params.appStyle.orientation = getOrientation(params);
     }
 
+if (params.overlay) {
+    params.overlay = createOverlay(params.overlay)
+  }
+
   return await newPlatformSpecific.startApp(params);
 }
 
@@ -257,6 +261,19 @@ function convertStyleParams(originalStyleObject) {
     ret.topBarReactViewInitialProps = {passPropsKey};
   }
   return ret;
+}
+
+function createOverlay(overlayParams) {
+  if (!overlayParams.screen) {
+    console.error('createOverlay(overlayParams): overlay must include a screen property');
+    return;
+  }
+
+  let result = Object.assign({}, overlayParams);
+  result.screenId = result.screen;
+  addNavigatorParams(result);
+  result = adaptNavigationParams(result);
+  return result
 }
 
 function convertDrawerParamsToSideMenuParams(drawerParams) {
@@ -795,6 +812,7 @@ function showContextualMenu(navigator, params) {
 
 function dismissContextualMenu() {
   newPlatformSpecific.dismissContextualMenu();
+function showOverlay(params) {
 }
 
 async function isAppLaunched() {
@@ -846,5 +864,7 @@ export default {
   isAppLaunched,
   isRootLaunched,
   getCurrentlyVisibleScreenId,
-  getLaunchArgs
+  getLaunchArgs,
+  showOverlay,
+  removeOverlay
 };
