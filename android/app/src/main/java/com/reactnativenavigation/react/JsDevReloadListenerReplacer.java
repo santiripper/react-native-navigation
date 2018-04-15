@@ -1,6 +1,7 @@
 package com.reactnativenavigation.react;
 
 import com.facebook.react.ReactInstanceManager;
+import com.reactnativenavigation.controllers.SplashActivity;
 import com.reactnativenavigation.utils.ReflectionUtils;
 
 import java.lang.reflect.InvocationHandler;
@@ -66,6 +67,12 @@ class JsDevReloadListenerReplacer {
 
             if (methodName.equals("onJSBundleLoadedFromServer") || methodName.equals("onReloadWithJSDebugger")) {
                 listener.onJsDevReload();
+            }
+
+            Object result = method.invoke(originalReactHelper, args);
+
+            if (methodName.equals("getCurrentActivity") && result == null) {
+                return SplashActivity.instance;
             }
 
             return method.invoke(originalReactHelper, args);
